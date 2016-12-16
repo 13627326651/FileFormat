@@ -22,19 +22,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    ui->lineEdit->clear();
-    fileName=QFileDialog::getOpenFileName(this,tr("请选择文件"),tr("."),tr("file(*.cpp)"));
-    if(fileName.isEmpty()){
-        QMessageBox::critical(this,tr("错误"),tr("请选择一个文件！"),QMessageBox::Cancel);
-        return;
-    }
-    ui->lineEdit->setText(fileName);
-
+    QString fn;
+    fn=ui->lineEdit->text();
+    fn=QFileDialog::getOpenFileName(this,tr("请选择文件"),tr("."),tr("file(*.cpp)"));
+    ui->lineEdit->setText(fn);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    QFile file(fileName);
+
+    QFile file(ui->lineEdit->text());
     if(!file.open(QFile::ReadOnly)){
         QMessageBox::critical(this,tr("错误"),tr("文件读取失败！"),QMessageBox::Cancel);
         return;
@@ -65,7 +62,6 @@ void MainWindow::on_pushButton_2_clicked()
         QMessageBox::critical(this,tr("错误"),tr("文件打开失败！"),QMessageBox::Cancel);
         return;
     }
-
     file.write(myFile.toLocal8Bit());
     file.close();
     QMessageBox::information(this,tr("格式化完成!"),tr("完成"),QMessageBox::Ok);
